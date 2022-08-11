@@ -100,8 +100,6 @@ public class LevelManager : Singleton<LevelManager>
         //initaiize the tile at the correct point
         newGroundTile.Setup(new Point(x, y),
             new Vector3(wordStart.x + (TileSize * x), wordStart.y - (TileSize * y), 0), map);
-        
-
     }
     
 

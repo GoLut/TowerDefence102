@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using Random = UnityEngine.Random;
 
 public class TileScript : MonoBehaviour
 {
@@ -49,4 +52,35 @@ public class TileScript : MonoBehaviour
 
         }
     }
+
+    private void OnMouseOver()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (EventSystem.current.IsPointerOverGameObject() || GameManager.Instance.ClickedButton == null)
+            {
+                return;
+            }
+            
+            PlaceTower();
+        }
+    }
+
+    private void PlaceTower()
+    {
+        Debug.Log("Placing at: "+ GridPosition.x + ", " + GridPosition.y);
+        //Instantiates a tower based on the last clicked on tower type known by the game manager.
+        //places it at the tile location 
+        GameObject tower = (GameObject)Instantiate(GameManager.Instance.ClickedButton.TowerPrefab, transform.position, Quaternion.identity);
+        
+        //make sure the towers don't overlap towers below when placed above
+        tower.GetComponent<SpriteRenderer>().sortingOrder = GridPosition.y;
+        
+        //make the tile the parent of the tower. cleans up the unity scene. 
+        tower.transform.SetParent(transform);
+        
+        // get all the buy functionality
+        GameManager.Instance.BuyTower();
+    }
+    
 }
