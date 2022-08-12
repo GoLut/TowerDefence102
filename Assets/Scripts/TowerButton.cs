@@ -4,13 +4,20 @@ using UnityEngine;
 
 public class TowerButton : MonoBehaviour
 {
-
+    [SerializeField]
+    private Sprite sprite; 
+    public Sprite Sprite
+    {
+        get => sprite;
+    }
+    
     [SerializeField] private GameObject towerPrefab;
-
     public GameObject TowerPrefab
     {
         get => towerPrefab;
+        
     }
+    
     
     // Start is called before the first frame update
     void Start()

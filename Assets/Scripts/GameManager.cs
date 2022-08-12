@@ -11,7 +11,9 @@ public class GameManager : Singleton<GameManager>
     public void PickTower(TowerButton towerButton)
     {
         this.ClickedButton = towerButton;
+        Hover.Instance.Activate(towerButton.Sprite);
         Debug.Log("Picked a new tower type.");
+        
     }
 
     public void BuyTower()
