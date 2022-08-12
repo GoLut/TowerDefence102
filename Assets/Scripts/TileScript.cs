@@ -8,11 +8,19 @@ using Random = UnityEngine.Random;
 public class TileScript : MonoBehaviour
 {
     public Point GridPosition { get; private set; }
+    public bool IsEmpty { get; private set; }
+
+    //tile is full
+    private Color32 tileFullColor = new Color32(255, 118, 118, 255);
+    //tile is empty
+    private Color32 tileEmptyColor = new Color32(96, 255, 90, 255);
+
+    private SpriteRenderer spriteRenderer;
 
 // Start is called before the first frame update
     void Start()
     {
-        
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -35,6 +43,8 @@ public class TileScript : MonoBehaviour
         
         //set the parent of the tile class. this cleans up the hyrarchy in unity. 
         transform.SetParent(parent);
+
+        IsEmpty = true;
     }
 
     private int random90DegreesInterval()
@@ -55,15 +65,31 @@ public class TileScript : MonoBehaviour
 
     private void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (!EventSystem.current.IsPointerOverGameObject() && GameManager.Instance.ClickedButton != null)
         {
-            if (EventSystem.current.IsPointerOverGameObject() || GameManager.Instance.ClickedButton == null)
+            //colouring of the tile based on its current state.
+            //ToDo (maybe extend with different types of entitys placed on the tile)
+            
+            if (IsEmpty)
             {
-                return;
+                ColorTile(tileEmptyColor);
+            }
+            else if (!IsEmpty)
+            {
+                ColorTile(tileFullColor);
             }
             
-            PlaceTower();
+            //if we click we place the tower if all conditions are met.
+            if (Input.GetMouseButtonDown(0) && IsEmpty)
+            { 
+                PlaceTower();   
+            }
         }
+    }
+
+    private void OnMouseExit()
+    {
+        ColorTile(Color.white);
     }
 
     private void PlaceTower()
@@ -81,6 +107,16 @@ public class TileScript : MonoBehaviour
         
         // get all the buy functionality
         GameManager.Instance.BuyTower();
+
+        //keep track if a tower is placed on the tile.
+        IsEmpty = false;
+        
+        ColorTile(Color.white);
+    }
+
+    private void ColorTile(Color32 newColor)
+    {
+        spriteRenderer.color = newColor;
     }
     
 }
