@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     //The last knon tower type that we clicked on.
-    public TowerButton ClickedButton { get; private set; }
+    public TowerButton ClickedButton { get; set; }
 
     public void PickTower(TowerButton towerButton)
     {
@@ -16,9 +16,19 @@ public class GameManager : Singleton<GameManager>
         
     }
 
+    private void HandleEscape()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            //disable hover icon.
+            Hover.Instance.Deactivate();
+        }
+    }
+
     public void BuyTower()
     {
-        ClickedButton = null;
+        // deactivete the mouse hover icon and the ability to place an extra tower.
+        Hover.Instance.Deactivate();
     }
     // Start is called before the first frame update
     void Start()
@@ -29,6 +39,6 @@ public class GameManager : Singleton<GameManager>
     // Update is called once per frame
     void Update()
     {
-        
+        HandleEscape();
     }
 }

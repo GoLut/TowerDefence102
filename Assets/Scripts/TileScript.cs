@@ -81,9 +81,6 @@ public class TileScript : MonoBehaviour
         
         // get all the buy functionality
         GameManager.Instance.BuyTower();
-        
-        // deactivete the mouse hover icon
-        Hover.Instance.Deactivate();
     }
     
 }

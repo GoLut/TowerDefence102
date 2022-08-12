@@ -20,6 +20,10 @@ public class Hover : Singleton<Hover>
 
     private void FollowMouse()
     {
+        if (spriteRenderer.enabled == false)
+        {
+            return;
+        }
         transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         transform.position = new Vector3(transform.position.x, transform.position.y, 0);
     }
@@ -34,7 +38,10 @@ public class Hover : Singleton<Hover>
 
     public void Deactivate()
     {
+        //disable the sprite renderer that hovers under the mouse.
         this.spriteRenderer.enabled = false;
+        //clear the selected tower memeory such that no tower can be placed
+        GameManager.Instance.ClickedButton = null;
     }
     
 }
