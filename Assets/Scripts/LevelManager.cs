@@ -59,7 +59,7 @@ public class LevelManager : Singleton<LevelManager>
         //estimates the map size based on the tile array entries given in mapData
         int mapX = mapData[0].ToCharArray().Length-1; //-1 because of end of line char
         int mapY = mapData.Length-1;
-        Debug.Log("X:" +(mapX).ToString() + ", y:" + (mapY).ToString());
+        // Debug.Log("X:" +(mapX).ToString() + ", y:" + (mapY).ToString());
 
         //temp value for the maximum tile location
         Vector3 maxTile = Vector3.zero;
@@ -74,7 +74,7 @@ public class LevelManager : Singleton<LevelManager>
             // Debug.Log(y.ToString());
             for (int x = 0; x < mapX; x++)
             {
-                Debug.Log("inline X:" +(x).ToString() + ", y:" + (y).ToString());
+                // Debug.Log("inline X:" +(x).ToString() + ", y:" + (y).ToString());
                 PlaceTile(newTiles[x].ToString(), x, y, worldStart); 
                 
             }
