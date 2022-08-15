@@ -407,6 +407,7 @@ MonoBehaviour:
   priceText: {fileID: 1278356279}
   sprite: {fileID: 21300000, guid: 330040b21e8878c4d85a86d076622d26, type: 3}
   towerPrefab: {fileID: 3686803249568479539, guid: 8334a48273f3cec4ea96119cf78f52b0, type: 3}
+  img: {fileID: 496687513}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -990,6 +991,7 @@ MonoBehaviour:
   priceText: {fileID: 1544541930}
   sprite: {fileID: 21300000, guid: fc313ff80887f17479964bd6bc611487, type: 3}
   towerPrefab: {fileID: 8023419745144788746, guid: d0602b475ba8e2d48af15513d148d59f, type: 3}
+  img: {fileID: 1105847066}
 --- !u!1 &1145386839
 GameObject:
   m_ObjectHideFlags: 0
@@ -1141,6 +1143,7 @@ MonoBehaviour:
   priceText: {fileID: 2082265189}
   sprite: {fileID: 21300000, guid: 24b0ccf3e07bd43489065159e3411162, type: 3}
   towerPrefab: {fileID: 6621513557626143171, guid: e2eec4b94a1c4e246918e77288a31e7d, type: 3}
+  img: {fileID: 1145386842}
 --- !u!1 &1278356277
 GameObject:
   m_ObjectHideFlags: 0
@@ -1427,6 +1430,7 @@ MonoBehaviour:
   priceText: {fileID: 2064652917}
   sprite: {fileID: 21300000, guid: 4255e17da3af2ea4a965fd444c9b7666, type: 3}
   towerPrefab: {fileID: 8668770374918060205, guid: 3745002c7a1e0474499db1120c116ed0, type: 3}
+  img: {fileID: 1440267317}
 --- !u!1 &1544541928
 GameObject:
   m_ObjectHideFlags: 0
@@ -1781,6 +1785,7 @@ MonoBehaviour:
   priceText: {fileID: 839009838}
   sprite: {fileID: 21300000, guid: a6db91b54e23ed0429a26ba24cab6fe6, type: 3}
   towerPrefab: {fileID: 1089679075640107578, guid: b78065a258a37064c8d64769661d3bd5, type: 3}
+  img: {fileID: 1746706457}
 --- !u!1 &1760582404
 GameObject:
   m_ObjectHideFlags: 0
