@@ -33,10 +33,12 @@ public class GameManager : Singleton<GameManager>
     
     public void PickTower(TowerButton towerButton)
     {
-        this.ClickedButton = towerButton;
-        Hover.Instance.Activate(towerButton.Sprite);
-        Debug.Log("Picked a new tower type.");
-        
+        if (Currency >= towerButton.Price)
+        {
+            this.ClickedButton = towerButton;
+            Hover.Instance.Activate(towerButton.Sprite);
+            Debug.Log("Picked a new tower type.");
+        }
     }
 
     private void HandleEscape()
@@ -50,6 +52,11 @@ public class GameManager : Singleton<GameManager>
 
     public void BuyTower()
     {
+        if (Currency >= ClickedButton.Price)
+        {
+            //substract currency when bought.
+            Currency = Currency - ClickedButton.Price;
+        }
         // deactivete the mouse hover icon and the ability to place an extra tower.
         Hover.Instance.Deactivate();
     }

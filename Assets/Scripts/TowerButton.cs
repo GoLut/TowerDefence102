@@ -1,9 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class TowerButton : MonoBehaviour
 {
+    //the price of the towers.
+    [SerializeField] private int price;
+    public int Price => price;
+
+    //the cost displayed underneeth the towers . 
+    [SerializeField] private TextMeshProUGUI priceText;
+
     [SerializeField]
     private Sprite sprite; 
     public Sprite Sprite
@@ -22,7 +30,7 @@ public class TowerButton : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        priceText.text = price + "$";
     }
 
     // Update is called once per frame
