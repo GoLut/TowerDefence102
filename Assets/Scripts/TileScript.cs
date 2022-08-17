@@ -15,7 +15,8 @@ public class TileScript : MonoBehaviour
     //tile is empty
     private Color32 tileEmptyColor = new Color32(96, 255, 90, 255);
 
-    private SpriteRenderer spriteRenderer;
+    public SpriteRenderer spriteRenderer;
+    public bool Debugging { get; set; }
 
 // Start is called before the first frame update
     void Start()
@@ -70,11 +71,11 @@ public class TileScript : MonoBehaviour
             //colouring of the tile based on its current state.
             //ToDo (maybe extend with different types of entitys placed on the tile)
             
-            if (IsEmpty)
+            if (IsEmpty && !Debugging)
             {
                 ColorTile(tileEmptyColor);
             }
-            else if (!IsEmpty)
+            else if (!IsEmpty && !Debugging) 
             {
                 ColorTile(tileFullColor);
             }
@@ -89,7 +90,10 @@ public class TileScript : MonoBehaviour
 
     private void OnMouseExit()
     {
-        ColorTile(Color.white);
+        if (!Debugging)
+        {
+            ColorTile(Color.white);
+        }
     }
 
     private void PlaceTower()
