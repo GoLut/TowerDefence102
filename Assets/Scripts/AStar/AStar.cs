@@ -46,7 +46,13 @@ public static class AStar
                 {
                     //get the node fron the dict list based on the position
                     Node Neighbor = nodesDict[neighborPos];
-                    Neighbor.TileRef.spriteRenderer.color = Color.black;
+                    // Neighbor.TileRef.spriteRenderer.color = Color.black;
+                    if (!openList.Contains(Neighbor))
+                    {
+                        openList.Add(Neighbor);
+                    }
+                    //set the parent if the g,h,f values require to do so.
+                    Neighbor.CalcValues(currentNode);
                 }
 
             }
@@ -55,7 +61,7 @@ public static class AStar
         
         //todo this is only for debugging remove later
         //finds the debugger object and runs the show debug path.
-        // GameObject.Find("AStarDebugger").GetComponent<AStarDebug>().DebugPath(openList);
+        GameObject.Find("AStarDebugger").GetComponent<AStarDebug>().DebugPath(openList);
     }
     
 }

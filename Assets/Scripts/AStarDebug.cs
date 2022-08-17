@@ -59,7 +59,10 @@ public class AStarDebug : MonoBehaviour
     {
         foreach (Node node in OpenList)
         {
-            node.TileRef.spriteRenderer.color = Color.cyan;
+            if (node.TileRef != startTile) //not the starting node.
+            {
+                node.TileRef.spriteRenderer.color = Color.cyan;
+            }
         }
     }
     

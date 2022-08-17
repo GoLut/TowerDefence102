@@ -16,4 +16,12 @@ public class Node
         this.GridPosition = TileRef.GridPosition;
     }
     
+    public Node Parent { get; private set; }
+
+    //used to calc the g, h and F values.
+    public void CalcValues(Node parent)
+    {
+        this.Parent = parent;
+    }
+    
 }
