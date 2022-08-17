@@ -20,6 +20,8 @@ public class LevelManager : Singleton<LevelManager>
     public Dictionary<Point, TileScript> Tiles { get; set; }
 
     [SerializeField] private Transform map;
+
+    private Point mapSize;
     
     // Start is called before the first frame update
     void Start()
@@ -55,11 +57,15 @@ public class LevelManager : Singleton<LevelManager>
         
         //We set how the map is generated based on this.
         string[] mapData = ReadLevelText();
-        
+
         //estimates the map size based on the tile array entries given in mapData
-        int mapX = mapData[0].ToCharArray().Length-1; //-1 because of end of line char
-        int mapY = mapData.Length-1;
-        // Debug.Log("X:" +(mapX).ToString() + ", y:" + (mapY).ToString());
+        int mapX = (mapData[0].ToCharArray().Length) ; //-1 because of end of line char
+        int mapY = mapData.Length -1;
+        
+        Debug.Log("X:" +(mapX).ToString() + ", y:" + (mapY).ToString());
+        
+        //set the map size to be known by other objects if needed.
+        mapSize = new Point(mapX, mapY);
 
         //temp value for the maximum tile location
         Vector3 maxTile = Vector3.zero;
@@ -135,4 +141,10 @@ public class LevelManager : Singleton<LevelManager>
         Instantiate(endSpawnPrefab, Tiles[endSpawnPointOfsetForSprite].GetComponent<TileScript>().WorldPosition,
             quaternion.identity);
     }
+
+    public bool InBounds(Point position)
+    {
+        return position.X >= 0 && position.Y >= 0 && position.X < mapSize.X && position.Y < mapSize.Y;
+    }
 }
+

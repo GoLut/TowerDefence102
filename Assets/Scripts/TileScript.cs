@@ -17,6 +17,9 @@ public class TileScript : MonoBehaviour
 
     public SpriteRenderer spriteRenderer;
     public bool Debugging { get; set; }
+    
+    //if the tile is walkable by Entities
+    public bool Walkable { get;  set; }
 
 // Start is called before the first frame update
     void Start()
@@ -46,6 +49,7 @@ public class TileScript : MonoBehaviour
         transform.SetParent(parent);
 
         IsEmpty = true;
+        Walkable = true;
     }
 
     private int random90DegreesInterval()
@@ -98,13 +102,13 @@ public class TileScript : MonoBehaviour
 
     private void PlaceTower()
     {
-        Debug.Log("Placing at: "+ GridPosition.x + ", " + GridPosition.y);
+        Debug.Log("Placing at: "+ GridPosition.X + ", " + GridPosition.Y);
         //Instantiates a tower based on the last clicked on tower type known by the game manager.
         //places it at the tile location 
         GameObject tower = (GameObject)Instantiate(GameManager.Instance.ClickedButton.TowerPrefab, transform.position, Quaternion.identity);
         
         //make sure the towers don't overlap towers below when placed above
-        tower.GetComponent<SpriteRenderer>().sortingOrder = GridPosition.y;
+        tower.GetComponent<SpriteRenderer>().sortingOrder = GridPosition.Y;
         
         //make the tile the parent of the tower. cleans up the unity scene. 
         tower.transform.SetParent(transform);
@@ -114,6 +118,7 @@ public class TileScript : MonoBehaviour
 
         //keep track if a tower is placed on the tile.
         IsEmpty = false;
+        Walkable = false;
         
         ColorTile(Color.white);
     }
