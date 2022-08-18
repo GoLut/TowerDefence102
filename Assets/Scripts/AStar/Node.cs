@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,10 +19,19 @@ public class Node
     
     public Node Parent { get; private set; }
 
+    public int G { get; set; }
+    public int H { get; set; }
+    public int F { get; set; }
+
     //used to calc the g, h and F values.
-    public void CalcValues(Node parent)
+    public void CalcValues(Node parent, int gCost, Node GoalPosition)
     {
         this.Parent = parent;
+        this.G = gCost + parent.G;//gscore +parent g score. 
+        this.H = (Math.Abs(GridPosition.X - GoalPosition.GridPosition.X) +
+                 Math.Abs(GoalPosition.GridPosition.Y - GridPosition.Y)) * 10;
+        this.F = G + H;
+
     }
     
 }

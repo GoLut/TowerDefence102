@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,7 +20,7 @@ public static class AStar
         }
     }
 
-    public static void GetPath(Point start)
+    public static void GetPath(Point start, Point goal)
     {
         if (nodesDict == null)
         {
@@ -47,6 +48,19 @@ public static class AStar
                 if (LevelManager.Instance.InBounds(neighborPos) && LevelManager.Instance.Tiles[neighborPos].Walkable &&
                     neighborPos != currentNode.GridPosition) //not equal to self
                 {
+                    int gCost = 0;
+                    // [14] [10] [14]
+                    // [10] [x]  [10]
+                    // [14] [10] [14]
+                    if (Math.Abs(x-y) == 1)
+                    {
+                        gCost = 10; //staight
+                    }
+                    else
+                    {
+                        gCost = 14; //diagonal
+                    }
+
                     // 3. get the node fron the dict list based on the position
                     Node Neighbor = nodesDict[neighborPos];
                     // Neighbor.TileRef.spriteRenderer.color = Color.black;
@@ -55,7 +69,7 @@ public static class AStar
                         openList.Add(Neighbor);
                     }
                     // 4. set the parent if the g,h,f values require to do so.
-                    Neighbor.CalcValues(currentNode);
+                    Neighbor.CalcValues(currentNode, gCost, nodesDict[goal]);
                 }
             }
         }

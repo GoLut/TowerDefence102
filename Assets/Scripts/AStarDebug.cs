@@ -24,7 +24,7 @@ public class AStarDebug : MonoBehaviour
         ClickedTile();
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            AStar.GetPath(startTile.GridPosition);
+            AStar.GetPath(startTile.GridPosition, goalTile.GridPosition);
         }
     }
 
@@ -70,7 +70,7 @@ public class AStarDebug : MonoBehaviour
             if (node.TileRef != startTile) //not the starting node.
             {
                 // node.TileRef.spriteRenderer.color = Color.cyan;
-                CreateDebugTile(node.TileRef.WorldPosition, Color.cyan );
+                CreateDebugTile(node.TileRef.WorldPosition, Color.cyan, node);
             }
             //overlaying the arrows to point to the parent nodes.
             PointToParent(node, node.TileRef.WorldPosition);
@@ -81,7 +81,7 @@ public class AStarDebug : MonoBehaviour
             if (node.TileRef != startTile && node.TileRef != goalTile) //not the starting node.
             {
                 Debug.Log("running entry from closed list.");
-                CreateDebugTile(node.TileRef.WorldPosition, Color.blue);
+                CreateDebugTile(node.TileRef.WorldPosition, Color.blue, node);
             }
 
         }
@@ -146,13 +146,22 @@ public class AStarDebug : MonoBehaviour
         }
     }
 
-    private void CreateDebugTile(Vector3 woldPos, Color32 color)
+    private void CreateDebugTile(Vector3 woldPos, Color32 color, Node node = null)
     {
         GameObject debugTile = (GameObject) Instantiate(debugTilePrefab, woldPos, Quaternion.identity);
 
         //set the color equal to what we give it.
         debugTile.GetComponent<SpriteRenderer>().color = color;
-        //overlay is messing a bit so we bring it to the front.
-        debugTile.GetComponent<SpriteRenderer>().sortingOrder = 20;
+
+        if (node != null)
+        {
+            //displaying the gscore on the debug tiles.
+            DebugTile tmp = debugTile.GetComponent<DebugTile>();
+            
+            tmp.G.text += node.G;
+            tmp.H.text += node.H;
+            tmp.F.text += node.F;
+        }
+
     }
 }
