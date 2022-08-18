@@ -71,6 +71,14 @@ public class GameManager : Singleton<GameManager>
     {
         HandleEscape();
     }
-    
-    
+
+    public void StartWave()
+    {
+        StartCoroutine(SpawnWave());
+    }
+
+    private IEnumerator SpawnWave()
+    {
+        yield return new WaitForSeconds(2.5f);
+    }
 }
