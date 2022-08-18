@@ -8,6 +8,9 @@ public class AStarDebug : MonoBehaviour
     private TileScript goalTile,startTile;
 
     [SerializeField] private GameObject arrowPrefab;
+
+    //tile that is overlayed on the game for debug purposes.
+    [SerializeField] private GameObject debugTilePrefab;
     
     // Start is called before the first frame update
     void Start()
@@ -42,15 +45,17 @@ public class AStarDebug : MonoBehaviour
                     if (startTile == null)
                     {
                         startTile = tileHit;
-                        //for visual purposes update the color.
-                        startTile.spriteRenderer.color = new Color32(255, 132, 0, 255);
+                        //for visual purposes create a overlaying debug tile
+                        // startTile.spriteRenderer.color = new Color32(255, 132, 0, 255);
+                        CreateDebugTile(startTile.WorldPosition, new Color32(255, 132, 0, 255));
                         startTile.Debugging = true;
                     }
                     else if (goalTile == null)
                     {
                         goalTile = tileHit;
-                        //for visual purposes update the color.
-                        goalTile.spriteRenderer.color = new Color32(255, 0, 0, 255);
+                        //for visual purposes create a overlaying debug tile
+                        // goalTile.spriteRenderer.color = new Color32(255, 0, 0, 255);
+                        CreateDebugTile(goalTile.WorldPosition, new Color32(255, 0, 0, 255));
                         goalTile.Debugging = true;
                     }
                 }
@@ -58,16 +63,27 @@ public class AStarDebug : MonoBehaviour
         }
     }
 
-    public void DebugPath(HashSet<Node> OpenList)
+    public void DebugPath(HashSet<Node> openList, HashSet<Node> closedList)
     {
-        foreach (Node node in OpenList)
+        foreach (Node node in openList)
         {
             if (node.TileRef != startTile) //not the starting node.
             {
-                node.TileRef.spriteRenderer.color = Color.cyan;
+                // node.TileRef.spriteRenderer.color = Color.cyan;
+                CreateDebugTile(node.TileRef.WorldPosition, Color.cyan );
             }
             //overlaying the arrows to point to the parent nodes.
             PointToParent(node, node.TileRef.WorldPosition);
+        }
+        
+        foreach (Node node in closedList)
+        {
+            if (node.TileRef != startTile && node.TileRef != goalTile) //not the starting node.
+            {
+                Debug.Log("running entry from closed list.");
+                CreateDebugTile(node.TileRef.WorldPosition, Color.blue);
+            }
+
         }
     }
 
@@ -77,7 +93,7 @@ public class AStarDebug : MonoBehaviour
         if (node.Parent != null)
         {
             GameObject arrow = (GameObject)Instantiate(arrowPrefab, position, quaternion.identity);
-
+            arrow.GetComponent<SpriteRenderer>().sortingOrder = 30;
             //right
             if ((node.GridPosition.X < node.Parent.GridPosition.X) &&
                 (node.GridPosition.Y == node.Parent.GridPosition.Y))
@@ -128,5 +144,15 @@ public class AStarDebug : MonoBehaviour
                 arrow.transform.eulerAngles = new Vector3(0, 0, 315);
             }
         }
+    }
+
+    private void CreateDebugTile(Vector3 woldPos, Color32 color)
+    {
+        GameObject debugTile = (GameObject) Instantiate(debugTilePrefab, woldPos, Quaternion.identity);
+
+        //set the color equal to what we give it.
+        debugTile.GetComponent<SpriteRenderer>().color = color;
+        //overlay is messing a bit so we bring it to the front.
+        debugTile.GetComponent<SpriteRenderer>().sortingOrder = 20;
     }
 }

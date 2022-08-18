@@ -28,11 +28,14 @@ public static class AStar
         
         //the open list is a hash set.
         HashSet<Node> openList = new HashSet<Node>();
+        //closed list
+        HashSet<Node> closedList = new HashSet<Node>();
+
         //current node is the first node. the start node
         Node currentNode = nodesDict[start];
-        //adding the starting node to the open list.
+        // 1. adding the starting node to the open list.
         openList.Add(currentNode);
-
+        //2. runs through all neighbours.
         for (int x = -1; x <= 1; x++)
         {
             for (int y = -1; y <= 1; y++)
@@ -44,24 +47,26 @@ public static class AStar
                 if (LevelManager.Instance.InBounds(neighborPos) && LevelManager.Instance.Tiles[neighborPos].Walkable &&
                     neighborPos != currentNode.GridPosition) //not equal to self
                 {
-                    //get the node fron the dict list based on the position
+                    // 3. get the node fron the dict list based on the position
                     Node Neighbor = nodesDict[neighborPos];
                     // Neighbor.TileRef.spriteRenderer.color = Color.black;
                     if (!openList.Contains(Neighbor))
                     {
                         openList.Add(Neighbor);
                     }
-                    //set the parent if the g,h,f values require to do so.
+                    // 4. set the parent if the g,h,f values require to do so.
                     Neighbor.CalcValues(currentNode);
                 }
-
             }
         }
         
-        
+        //5. move openlist to closed list. when we checked all the neighbors of the specific current node.
+        openList.Remove(currentNode);
+        closedList.Add(currentNode);
+
         //todo this is only for debugging remove later
         //finds the debugger object and runs the show debug path.
-        GameObject.Find("AStarDebugger").GetComponent<AStarDebug>().DebugPath(openList);
+        GameObject.Find("AStarDebugger").GetComponent<AStarDebug>().DebugPath(openList, closedList);
     }
     
 }

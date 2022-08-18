@@ -16,6 +16,7 @@ public class TileScript : MonoBehaviour
     private Color32 tileEmptyColor = new Color32(96, 255, 90, 255);
 
     public SpriteRenderer spriteRenderer;
+    
     public bool Debugging { get; set; }
     
     //if the tile is walkable by Entities
