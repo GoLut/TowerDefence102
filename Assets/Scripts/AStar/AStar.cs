@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 //made static so it can be used from other start
@@ -31,52 +32,86 @@ public static class AStar
         HashSet<Node> openList = new HashSet<Node>();
         //closed list
         HashSet<Node> closedList = new HashSet<Node>();
-
+        //the final path found by aStar
+        Stack<Node> finalPath = new Stack<Node>();
+        
         //current node is the first node. the start node
         Node currentNode = nodesDict[start];
         // 1. adding the starting node to the open list.
         openList.Add(currentNode);
-        //2. runs through all neighbours.
-        for (int x = -1; x <= 1; x++)
+
+        while (openList.Count > 0) //step 10
         {
-            for (int y = -1; y <= 1; y++)
-            { 
-                //get the position
-                Point neighborPos = new Point(currentNode.GridPosition.X - x, currentNode.GridPosition.Y - y);
-                // Debug.Log(neighborPos.x +", "+ neighborPos.y);
-
-                if (LevelManager.Instance.InBounds(neighborPos) && LevelManager.Instance.Tiles[neighborPos].Walkable &&
-                    neighborPos != currentNode.GridPosition) //not equal to self
+            //2. runs through all neighbours.
+            for (int x = -1; x <= 1; x++)
+            {
+                for (int y = -1; y <= 1; y++)
                 {
-                    int gCost = 0;
-                    // [14] [10] [14]
-                    // [10] [x]  [10]
-                    // [14] [10] [14]
-                    if (Math.Abs(x-y) == 1)
-                    {
-                        gCost = 10; //staight
-                    }
-                    else
-                    {
-                        gCost = 14; //diagonal
-                    }
+                    //get the position
+                    Point neighborPos = new Point(currentNode.GridPosition.X - x, currentNode.GridPosition.Y - y);
+                    // Debug.Log(neighborPos.x +", "+ neighborPos.y);
 
-                    // 3. get the node fron the dict list based on the position
-                    Node Neighbor = nodesDict[neighborPos];
-                    // Neighbor.TileRef.spriteRenderer.color = Color.black;
-                    if (!openList.Contains(Neighbor))
+                    if (LevelManager.Instance.InBounds(neighborPos) &&
+                        LevelManager.Instance.Tiles[neighborPos].Walkable &&
+                        neighborPos != currentNode.GridPosition) //not equal to self
                     {
-                        openList.Add(Neighbor);
+                        int gCost = 0;
+                        // [14] [10] [14]
+                        // [10] [x]  [10]
+                        // [14] [10] [14]
+                        if (Math.Abs(x - y) == 1)
+                        {
+                            gCost = 10; //staight
+                        }
+                        else
+                        {
+                            gCost = 14; //diagonal
+                        }
+
+                        // 3. get the node fron the dict list based on the position
+                        Node Neighbor = nodesDict[neighborPos];
+
+                        if (openList.Contains(Neighbor))
+                        {
+                            if ((currentNode.G + gCost) < Neighbor.G)
+                            {
+                                // 4. set the parent if the g,h,f values require to do so.
+                                Neighbor.CalcValues(currentNode, gCost, nodesDict[goal]); //9.4
+                            }
+                        }
+                        //9.1 ignore nodes that are already in the closed list. 
+                        else if (!closedList.Contains(Neighbor))
+                        {
+                            openList.Add(Neighbor); // 9.2
+                            Neighbor.CalcValues(currentNode, gCost, nodesDict[goal]); //9.3
+                        }
                     }
-                    // 4. set the parent if the g,h,f values require to do so.
-                    Neighbor.CalcValues(currentNode, gCost, nodesDict[goal]);
                 }
             }
+
+            //5. & 8 move openlist to closed list. when we checked all the neighbors of the specific current node.
+            openList.Remove(currentNode);
+            closedList.Add(currentNode);
+
+            //7. find the node with the lowest F score
+            if (openList.Count > 0)
+            {
+                //sorts the list by F value and selects the first value.
+                currentNode = openList.OrderBy(n => n.F).First();
+            }
+
+            //find the end goal
+            if (currentNode == nodesDict[goal])
+            {
+                Debug.Log("Path Found");
+                while (currentNode.GridPosition != start)
+                {
+                    finalPath.Push(currentNode);
+                    currentNode = currentNode.Parent;
+                }
+                break;
+            }
         }
-        
-        //5. move openlist to closed list. when we checked all the neighbors of the specific current node.
-        openList.Remove(currentNode);
-        closedList.Add(currentNode);
 
         //todo this is only for debugging remove later
         //finds the debugger object and runs the show debug path.
