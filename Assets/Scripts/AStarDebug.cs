@@ -67,7 +67,7 @@ public class AStarDebug : MonoBehaviour
     {
         foreach (Node node in openList)
         {
-            if (node.TileRef != startTile) //not the starting node.
+            if (node.TileRef != startTile && node.TileRef != goalTile) //not the starting node and end node.
             {
                 // node.TileRef.spriteRenderer.color = Color.cyan;
                 CreateDebugTile(node.TileRef.WorldPosition, Color.cyan, node);
@@ -78,12 +78,13 @@ public class AStarDebug : MonoBehaviour
         
         foreach (Node node in closedList)
         {
-            if (node.TileRef != startTile && node.TileRef != goalTile) //not the starting node.
+            if (node.TileRef != startTile && node.TileRef != goalTile) //not the starting node and end node.
             {
                 Debug.Log("running entry from closed list.");
                 CreateDebugTile(node.TileRef.WorldPosition, Color.blue, node);
             }
-
+            //overlaying the arrows to point to the parent nodes.
+            PointToParent(node, node.TileRef.WorldPosition);
         }
     }
 
