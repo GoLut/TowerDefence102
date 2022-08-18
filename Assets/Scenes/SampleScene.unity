@@ -152,6 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b3b6bf36a215d147abab6652d26725f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 3913979861829293056, guid: ff340ae3f5507494093f54e25829c554, type: 3}
+  debugTilePrefab: {fileID: 2617197444954591304, guid: 9ba1c6624be9aa34ab175abc7be2d7bd, type: 3}
 --- !u!4 &8378630
 Transform:
   m_ObjectHideFlags: 0
