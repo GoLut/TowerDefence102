@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AStarDebug : MonoBehaviour
@@ -63,7 +64,7 @@ public class AStarDebug : MonoBehaviour
         }
     }
 
-    public void DebugPath(HashSet<Node> openList, HashSet<Node> closedList)
+    public void DebugPath(HashSet<Node> openList, HashSet<Node> closedList, Stack<Node> finalPath)
     {
         foreach (Node node in openList)
         {
@@ -72,19 +73,26 @@ public class AStarDebug : MonoBehaviour
                 // node.TileRef.spriteRenderer.color = Color.cyan;
                 CreateDebugTile(node.TileRef.WorldPosition, Color.cyan, node);
             }
+
             //overlaying the arrows to point to the parent nodes.
             PointToParent(node, node.TileRef.WorldPosition);
         }
-        
+
         foreach (Node node in closedList)
         {
-            if (node.TileRef != startTile && node.TileRef != goalTile) //not the starting node and end node.
+            if (node.TileRef != startTile && node.TileRef != goalTile && !finalPath.Contains(node)) //not the starting node and end node.
             {
                 Debug.Log("running entry from closed list.");
                 CreateDebugTile(node.TileRef.WorldPosition, Color.blue, node);
             }
+
             //overlaying the arrows to point to the parent nodes.
             PointToParent(node, node.TileRef.WorldPosition);
+        }
+
+        foreach (Node node in finalPath)
+        {
+            CreateDebugTile(node.TileRef.WorldPosition, Color.green, node);
         }
     }
 

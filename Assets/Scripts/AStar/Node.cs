@@ -31,7 +31,6 @@ public class Node
         this.H = (Math.Abs(GridPosition.X - GoalPosition.GridPosition.X) +
                  Math.Abs(GoalPosition.GridPosition.Y - GridPosition.Y)) * 10;
         this.F = G + H;
-
     }
     
 }

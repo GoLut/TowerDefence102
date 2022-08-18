@@ -103,9 +103,13 @@ public class LevelManager : Singleton<LevelManager>
         // create a new tile and makes a reference to that tile
         TileScript newGroundTile = Instantiate(groundTilePrefabs[tileSpriteIndex]).GetComponent<TileScript>();
         
+        
         //initaiize the tile at the correct point
         newGroundTile.Setup(new Point(x, y),
-            new Vector3(wordStart.x + (TileSize * x), wordStart.y - (TileSize * y), 0), map);
+            new Vector3(wordStart.x + (TileSize * x), wordStart.y - (TileSize * y), 0), map,
+            tileType);
+        
+
     }
     
 

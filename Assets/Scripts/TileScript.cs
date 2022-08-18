@@ -34,7 +34,7 @@ public class TileScript : MonoBehaviour
         
     }
     
-    public void Setup(Point gridPos, Vector3 worldPos, Transform parent)
+    public void Setup(Point gridPos, Vector3 worldPos, Transform parent, string tileType)
     {
         //position on the grid (eg 1,1)
         this.GridPosition = gridPos;
@@ -50,7 +50,16 @@ public class TileScript : MonoBehaviour
         transform.SetParent(parent);
 
         IsEmpty = true;
-        Walkable = true;
+        //set the non walkability of non path tiles.
+        if (int.Parse(tileType) == 0)
+        {
+            Walkable = false;
+        }
+        else
+        {
+            Walkable = true;
+        }
+
     }
 
     private int random90DegreesInterval()

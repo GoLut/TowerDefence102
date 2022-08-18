@@ -65,6 +65,10 @@ public static class AStar
                         }
                         else
                         {
+                            if (!ConnectedDiagonally(currentNode, nodesDict[neighborPos]))
+                            {
+                                continue;
+                            }
                             gCost = 14; //diagonal
                         }
 
@@ -112,10 +116,29 @@ public static class AStar
                 break;
             }
         }
-
         //todo this is only for debugging remove later
         //finds the debugger object and runs the show debug path.
-        GameObject.Find("AStarDebugger").GetComponent<AStarDebug>().DebugPath(openList, closedList);
+        GameObject.Find("AStarDebugger").GetComponent<AStarDebug>().DebugPath(openList, closedList, finalPath);
     }
-    
+
+    private static bool ConnectedDiagonally(Node currentNode, Node neighbor)
+    {
+        Point direction = neighbor.GridPosition - currentNode.GridPosition;
+
+        //get the posisions to check for towers.
+        Point first = new Point(currentNode.GridPosition.X + direction.X, currentNode.GridPosition.Y);
+        Point second = new Point(currentNode.GridPosition.X, currentNode.GridPosition.Y + direction.Y);
+
+        //check the points for towers using the information known in the level manager.
+        if (LevelManager.Instance.InBounds(first) && !LevelManager.Instance.Tiles[first].Walkable)
+        {
+            return false;
+        }
+        if (LevelManager.Instance.InBounds(second) && !LevelManager.Instance.Tiles[second].Walkable)
+        {
+            return false;
+        }
+        //positions are free then we return true,
+        return true;
+    }
 }
