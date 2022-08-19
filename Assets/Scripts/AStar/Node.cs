@@ -11,10 +11,13 @@ public class Node
     
     public TileScript TileRef { get; private set; }
 
+    public Vector2 WorldPosition { get; set; }
+
     public Node(TileScript tileRef)
     {
         this.TileRef = tileRef;
         this.GridPosition = TileRef.GridPosition;
+        this.WorldPosition = tileRef.WorldPosition;
     }
     
     public Node Parent { get; private set; }

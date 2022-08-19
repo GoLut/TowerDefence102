@@ -91,6 +91,9 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator SpawnWave()
     {
+        //generate the path when we start the wave.
+        LevelManager.Instance.GeneratePath();
+        
         //spawn a random monster for now based on index 0-3
         int monsterIndex = Random.Range(0, 4);
 

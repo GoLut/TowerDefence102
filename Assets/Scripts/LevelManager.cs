@@ -24,7 +24,24 @@ public class LevelManager : Singleton<LevelManager>
     [SerializeField] private Transform map;
 
     private Point mapSize;
-    
+
+    //the final path all enemies will use to move around.
+    private Stack<Node> path;
+
+    public Stack<Node> Path
+    {
+        get
+        {
+            if (path == null)
+            {
+                GeneratePath();
+            }
+            //everytime someone gets information from the path we generate a deep copy of the path such that no
+            //items are removed from the stack by multiple enemies
+            return new Stack<Node>(new Stack<Node>(path));
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -155,5 +172,12 @@ public class LevelManager : Singleton<LevelManager>
     {
         return position.X >= 0 && position.Y >= 0 && position.X < mapSize.X && position.Y < mapSize.Y;
     }
+
+    public void GeneratePath()
+    {
+        path = AStar.GetPath(startSpawnPoint, endSpawnPoint);
+    }
+    
+    
 }
 
