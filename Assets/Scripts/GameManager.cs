@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Random = UnityEngine.Random;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -27,6 +29,9 @@ public class GameManager : Singleton<GameManager>
             Debug.Log("Set starting currency");
         }
     }
+
+    //the object pool that will contain all generated entities. every tower or enemy can acces this pool.
+    public ObjectPool Pool { get; set; }
 
     //the text element on the canvas that displays the current currency value.
     [SerializeField] private TextMeshProUGUI currencyText;
@@ -60,6 +65,13 @@ public class GameManager : Singleton<GameManager>
         // deactivete the mouse hover icon and the ability to place an extra tower.
         Hover.Instance.Deactivate();
     }
+
+    private void Awake()
+    {
+        Pool = GetComponent<ObjectPool>();
+    }
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -79,6 +91,30 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator SpawnWave()
     {
+        //spawn a random monster for now based on index 0-3
+        int monsterIndex = Random.Range(0, 4);
+
+        String type = string.Empty;
+
+        switch (monsterIndex)
+        {
+            case 0:
+                type = "Ninja"; 
+                break;
+            case 1:
+                type = "SwordMaster"; 
+                break;
+            case 2:
+                type = "SkeletonKnight"; 
+                break;
+            case 3:
+                type = "WarriorGirl"; 
+                break;
+            default:
+                break;
+        }
+
+        Pool.GetObject(type);
         yield return new WaitForSeconds(2.5f);
     }
 }

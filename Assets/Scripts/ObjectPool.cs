@@ -4,6 +4,22 @@ using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
-    private GameObject[] objectPrefabs;
+    [SerializeField] private GameObject[] objectPrefabs;
+    
+    public GameObject GetObject(string type)
+    {
+        for (int i = 0; i < objectPrefabs.Length; i++)
+        {
+            if (objectPrefabs[i].name == type)
+            {
+                GameObject newObject = Instantiate(objectPrefabs[i]);
+                newObject.name = type;
+                return newObject;
+            }
+        }
+        Debug.Log("returning null on GetObject from object pool");
+        return null;
+    }
+    
     
 }
