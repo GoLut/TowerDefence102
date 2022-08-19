@@ -113,8 +113,9 @@ public class GameManager : Singleton<GameManager>
             default:
                 break;
         }
-
-        Pool.GetObject(type);
+        //get a reference to the latest spawned Enemy form the object pool.
+        Enemy enemy = Pool.GetObject(type).GetComponent<Enemy>();
+        enemy.Spawn();
         yield return new WaitForSeconds(2.5f);
     }
 }

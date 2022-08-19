@@ -17,6 +17,8 @@ public class LevelManager : Singleton<LevelManager>
     
     [SerializeField] private GameObject starSpawnPrefab, endSpawnPrefab;
     
+    public Portal StartPortal { get; set;}
+    
     public Dictionary<Point, TileScript> Tiles { get; set; }
 
     [SerializeField] private Transform map;
@@ -134,8 +136,11 @@ public class LevelManager : Singleton<LevelManager>
         //define the spawn point.
         startSpawnPoint = new Point(1, 3);
         //spawn the object at the spawn point tile.
-        Instantiate(starSpawnPrefab, Tiles[startSpawnPoint].GetComponent<TileScript>().WorldPosition,
+        GameObject tmp = (GameObject) Instantiate(starSpawnPrefab, Tiles[startSpawnPoint].GetComponent<TileScript>().WorldPosition,
             quaternion.identity);
+        //we get a reference to the start portal for objects to ask the game manager
+        StartPortal = tmp.GetComponent<Portal>(); 
+        StartPortal.name = "StartPortal";
         
         //set the end spawn point
         endSpawnPoint = new Point(16, 8);
