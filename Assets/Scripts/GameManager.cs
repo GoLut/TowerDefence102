@@ -95,7 +95,7 @@ public class GameManager : Singleton<GameManager>
         LevelManager.Instance.GeneratePath();
         
         //spawn a random monster for now based on index 0-3
-        int monsterIndex = 0; //Random.Range(0, 4);
+        int monsterIndex = Random.Range(0, 4);
 
         String type = string.Empty;
 
