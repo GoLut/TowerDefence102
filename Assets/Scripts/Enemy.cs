@@ -138,5 +138,13 @@ public class Enemy : MonoBehaviour
             }
         }
     }
-    
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Finish")
+        {
+            Debug.Log("WE have collided witht he castle. ");
+            Destroy(gameObject);
+        }
+    }
 }
