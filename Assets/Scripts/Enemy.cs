@@ -149,21 +149,23 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSecondsRealtime(animationLength);
         //Animation finished
         //signal the animator to switch to the death animation
-        AnimateDeath(4.0f);
+        AnimateDeath();
+        yield return new WaitForSecondsRealtime(4f);
+        Release();
     }
     
     
-    private void AnimateDeath(float time)
+    private void AnimateDeath()
     {
+        //tell the animator to change animation
         myAnimator.SetBool("Death", true);
         //spawn blood for gore effect :)
         Instantiate(blood, transform.position, Quaternion.identity);
-        //destroy the object after the death animation
-        Destroy (gameObject, this.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length + time);
     }
 
     private void AnimateAttack()
     {
+        //tell the animator to change animation.
         myAnimator.SetInteger("Attack", 1);
     }
 
@@ -175,6 +177,27 @@ public class Enemy : MonoBehaviour
             StartCoroutine(AttackAndDeathAnimation());
             
         }
+    }
+
+    private void resetAnimations()
+    {
+        myAnimator.SetBool("Death", false);
+        myAnimator.SetInteger("Attack", 0);
+        myAnimator.SetInteger("Horizontal", 0);
+        myAnimator.SetInteger("Vertical", -1);
+        // myAnimator = gameObject.GetComponent<Animator>();
+        myAnimator.Rebind();
+        myAnimator.Update(0f);
+        myAnimator.Play("idle", -1, 0f);
+    }
+    
+    //releases enemy from the world and reset the status of the monster.
+    private void Release()
+    {
+        resetAnimations();
+        IsActive = false;
+        
+        GameManager.Instance.Pool.ReleaseObject(gameObject);
     }
     
 }
