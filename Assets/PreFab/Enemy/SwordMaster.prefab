@@ -6195,6 +6195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
+  blood: {fileID: 2610000349905770485, guid: 92662889b00534c4fab423ad5c7d2553, type: 3}
 --- !u!50 &5404972815006490343
 Rigidbody2D:
   serializedVersion: 4

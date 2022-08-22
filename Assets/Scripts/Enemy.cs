@@ -18,6 +18,9 @@ public class Enemy : MonoBehaviour
 
     private Animator myAnimator;
 
+    //blood particle effect
+    [SerializeField] private GameObject blood; 
+
     private void Update()
     {
         Move();
@@ -134,9 +137,34 @@ public class Enemy : MonoBehaviour
                 //moving to the right
                 myAnimator.SetInteger("Horizontal", 1);
                 myAnimator.SetInteger("Vertical", 0);
-                
             }
         }
+    }
+
+    //use a coroutine so we can pause this function and wait for the animation to complete
+    private IEnumerator AttackAndDeathAnimation()
+    {
+        AnimateAttack();
+        float animationLength = myAnimator.GetCurrentAnimatorStateInfo(0).length*3;
+        yield return new WaitForSecondsRealtime(animationLength);
+        //Animation finished
+        //signal the animator to switch to the death animation
+        AnimateDeath(4.0f);
+    }
+    
+    
+    private void AnimateDeath(float time)
+    {
+        myAnimator.SetBool("Death", true);
+        //spawn blood for gore effect :)
+        Instantiate(blood, transform.position, Quaternion.identity);
+        //destroy the object after the death animation
+        Destroy (gameObject, this.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length + time);
+    }
+
+    private void AnimateAttack()
+    {
+        myAnimator.SetInteger("Attack", 1);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -144,7 +172,9 @@ public class Enemy : MonoBehaviour
         if (other.tag == "Finish")
         {
             Debug.Log("WE have collided witht he castle. ");
-            Destroy(gameObject);
+            StartCoroutine(AttackAndDeathAnimation());
+            
         }
     }
+    
 }
