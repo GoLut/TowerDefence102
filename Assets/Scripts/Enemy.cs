@@ -16,6 +16,8 @@ public class Enemy : MonoBehaviour
     
     private bool IsActive { get; set; }
 
+    private Animator myAnimator;
+
     private void Update()
     {
         Move();
@@ -23,7 +25,11 @@ public class Enemy : MonoBehaviour
 
     public void Spawn()
     {
+        //set the start position equal to the position of the spawning portal.
         transform.position = LevelManager.Instance.StartPortal.transform.position;
+        
+        //initialize the animator by calling to the animator component attached to the enemy
+        myAnimator = GetComponent<Animator>();
         
         //does something over time
         StartCoroutine(Scale(new Vector3(0.1f, 0.1f, 0.1f), new Vector3(0.25f, 0.25f, 0.25f)));
@@ -67,8 +73,12 @@ public class Enemy : MonoBehaviour
             {
                 if (path != null && path.Count > 0)
                 {
+                    //set the inital animation correctly
+                    Animate(GridPosition, path.Peek().GridPosition);
+
                     GridPosition = path.Peek().GridPosition;
                     destination = path.Pop().WorldPosition;
+                    
                 }
             }
         }
@@ -79,14 +89,54 @@ public class Enemy : MonoBehaviour
     {
         if (newPath != null)
         {
+            //copy global path stack to this local enemy
             this.path = newPath;
+            
+            //set the inital animation correctly
+            Animate(LevelManager.Instance.startSpawnPoint, path.Peek().GridPosition);
+            
             // Debug.Log("looking for current grid position");
             GridPosition = path.Peek().GridPosition;
+            
             destination = path.Pop().WorldPosition;
+            
+            
         }
         else{
             Debug.Log("no path found it is null");
         }
     }
 
+    private void Animate( Point currentPosition, Point newPosition)
+    {
+        if (currentPosition.Y > newPosition.Y)
+        {
+            //we are moving down
+            myAnimator.SetInteger("Horizontal", 0);
+            myAnimator.SetInteger("Vertical", -1);
+        }
+        else if (currentPosition.Y < newPosition.Y)
+        {
+            //moving up
+            myAnimator.SetInteger("Horizontal", 0);
+            myAnimator.SetInteger("Vertical", 1);
+        }
+        else if (currentPosition.Y == newPosition.Y)
+        {
+            if (currentPosition.X > newPosition.X)
+            {
+                //moving to the left
+                myAnimator.SetInteger("Horizontal", -1);
+                myAnimator.SetInteger("Vertical", 0);
+            }
+            else if (currentPosition.X < newPosition.X)
+            {
+                //moving to the right
+                myAnimator.SetInteger("Horizontal", 1);
+                myAnimator.SetInteger("Vertical", 0);
+                
+            }
+        }
+    }
+    
 }

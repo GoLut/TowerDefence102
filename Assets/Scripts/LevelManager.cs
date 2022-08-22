@@ -13,7 +13,7 @@ public class LevelManager : Singleton<LevelManager>
 
     [SerializeField] private CameraMovement cameraMovement;
     
-    private Point startSpawnPoint, endSpawnPoint;
+    public Point startSpawnPoint, endSpawnPoint;
     
     [SerializeField] private GameObject starSpawnPrefab, endSpawnPrefab;
     
