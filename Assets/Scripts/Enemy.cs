@@ -173,7 +173,7 @@ public class Enemy : MonoBehaviour
     {
         if (other.tag == "Finish")
         {
-            Debug.Log("WE have collided witht he castle. ");
+            // Debug.Log("WE have collided witht he castle. ");
             StartCoroutine(AttackAndDeathAnimation());
             
         }
@@ -198,6 +198,8 @@ public class Enemy : MonoBehaviour
         IsActive = false;
         
         GameManager.Instance.Pool.ReleaseObject(gameObject);
+        //removes it self from the active monster list in the game manager
+        GameManager.Instance.RemoveEnemy(this);
     }
     
 }

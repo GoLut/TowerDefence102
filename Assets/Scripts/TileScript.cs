@@ -48,16 +48,19 @@ public class TileScript : MonoBehaviour
         
         //set the parent of the tile class. this cleans up the hyrarchy in unity. 
         transform.SetParent(parent);
-
-        IsEmpty = true;
+        
         //set the non walkability of non path tiles.
         if (int.Parse(tileType) == 0)
         {
+            //grass
             Walkable = false;
+            IsEmpty = true;
         }
         else
         {
+            //path
             Walkable = true;
+            IsEmpty = false;
         }
 
     }

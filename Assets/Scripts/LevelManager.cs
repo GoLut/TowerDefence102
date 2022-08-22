@@ -130,8 +130,6 @@ public class LevelManager : Singleton<LevelManager>
         newGroundTile.Setup(new Point(x, y),
             new Vector3(wordStart.x + (TileSize * x), wordStart.y - (TileSize * y), 0), map,
             tileType);
-        
-
     }
     
 

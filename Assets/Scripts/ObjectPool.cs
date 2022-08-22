@@ -19,7 +19,7 @@ public class ObjectPool : MonoBehaviour
             if (go.name == type && !go.activeInHierarchy)
             {
                 go.SetActive(true);
-                Debug.Log("returning pooled object");
+                // Debug.Log("returning pooled object");
                 return go;
             }
         }
