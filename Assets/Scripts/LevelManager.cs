@@ -34,10 +34,13 @@ public class LevelManager : Singleton<LevelManager>
         {
             if (path == null)
             {
+                // Debug.Log("Path Equals null generating new Astar Path");
+                //generate the Astar path from the start to finish point on the map.
                 GeneratePath();
             }
             //everytime someone gets information from the path we generate a deep copy of the path such that no
             //items are removed from the stack by multiple enemies
+            // Debug.Log("returning deep copy of path");
             return new Stack<Node>(new Stack<Node>(path));
         }
     }
@@ -81,7 +84,7 @@ public class LevelManager : Singleton<LevelManager>
         int mapX = (mapData[0].ToCharArray().Length) ; //-1 because of end of line char
         int mapY = mapData.Length -1;
         
-        Debug.Log("X:" +(mapX).ToString() + ", y:" + (mapY).ToString());
+        // Debug.Log("X:" +(mapX).ToString() + ", y:" + (mapY).ToString());
         
         //set the map size to be known by other objects if needed.
         mapSize = new Point(mapX, mapY);

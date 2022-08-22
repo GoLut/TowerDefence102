@@ -68,8 +68,13 @@ public class Enemy : MonoBehaviour
     {
         if (newPath != null)
         {
+            this.path = newPath;
+            // Debug.Log("looking for current grid position");
             GridPosition = path.Peek().GridPosition;
             destination = path.Pop().WorldPosition;
+        }
+        else{
+            Debug.Log("no path found it is null");
         }
     }
 
