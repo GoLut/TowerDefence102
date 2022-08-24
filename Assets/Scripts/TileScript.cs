@@ -22,6 +22,10 @@ public class TileScript : MonoBehaviour
     //if the tile is walkable by Entities
     public bool Walkable { get;  set; }
 
+    //the tower placed on the tile.
+    private Tower myTower;
+    
+    
 // Start is called before the first frame update
     void Start()
     {
@@ -103,6 +107,20 @@ public class TileScript : MonoBehaviour
                 PlaceTower();   
             }
         }
+        //if we havn't selected a tower from the menu then we select the tower that is already placed on the map
+        else if (!EventSystem.current.IsPointerOverGameObject() && GameManager.Instance.ClickedButton == null && Input.GetMouseButtonDown(0))
+        {
+            if (myTower!=null)
+            {
+                //forward the tower placed on the tile to the game manager
+                GameManager.Instance.SelectTower(myTower);
+            }
+            else
+            {
+                //deselect tower when we select a tile that does not cointain a tower.
+                GameManager.Instance.DeSelectTower();
+            }
+        }
     }
 
     private void OnMouseExit()
@@ -132,6 +150,9 @@ public class TileScript : MonoBehaviour
         //keep track if a tower is placed on the tile.
         IsEmpty = false;
         Walkable = false;
+        
+        //set the tower reference to the object that is sitting on the range element of the tower.
+        this.myTower = tower.transform.GetChild(0).GetComponent<Tower>();
         
         ColorTile(Color.white);
     }

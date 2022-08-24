@@ -39,6 +39,9 @@ public class GameManager : Singleton<GameManager>
     //game over Bool
     public bool gameOver = false;
 
+    //the current selected tower.
+    private Tower selectedTower;
+
     //play wave button
     [SerializeField] private GameObject waveButton;
 
@@ -210,6 +213,31 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    public void SelectTower(Tower tower)
+    {
+        if (selectedTower != null)
+        {
+            //we toggle the range indicator of the old tower before going to the new tower to disable it.
+            selectedTower.SelectToggle();
+        }
+        //store the current selected tower
+        selectedTower = tower;
+        //if we have selected a tower we toggle the range inidcator
+        selectedTower.SelectToggle();
+        
+    }
+
+    public void DeSelectTower()
+    {
+        //we toggle the range indicator to disable
+        if (selectedTower != null)
+        {
+            selectedTower.SelectToggle();
+        }
+        //we have not selected a tower.
+        selectedTower = null;
+    }
+    
     public void Restart()
     {
         //to ensure everything works when we restart.
