@@ -5,27 +5,13 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class GameManager : Singleton<GameManager>
 {
     //The last knon tower type that we clicked on.
     public TowerButton ClickedButton { get; set; }
-
-    //currency
-    private int currency;
-
-    public int Currency
-    {
-        get { return currency; }
-        set
-        {
-            this.currency = value;
-            //quick hack by making it a property we can avoid writing whole functions.
-            this.currencyText.text = " " + this.currency.ToString() + "<color=#85BB65>$</color>";
-            Debug.Log("Set starting currency");
-        }
-    }
 
     //the object pool that will contain all generated entities. every tower or enemy can acces this pool.
     public ObjectPool Pool { get; set; }
@@ -35,15 +21,51 @@ public class GameManager : Singleton<GameManager>
 
     //text incicator that displays the current wave
     [SerializeField] private TextMeshProUGUI waveText;
+    //text indicator for the wave score.
+    [SerializeField] private TextMeshProUGUI waveTextScore;
+    
+    //text incidator for the player lives.
+    [SerializeField] private TextMeshProUGUI livesText;
 
     //the current wave we are at atm
     private int wave;
+    
+    //player health
+    private int lives;
+    
+    //currency
+    private int currency;
+    
+    //game over Bool
+    public bool gameOver = false;
 
+    //play wave button
     [SerializeField] private GameObject waveButton;
+
+    //gameOverMenu
+    [SerializeField] private GameObject gameOverMenu;
 
     //list with all the active monsters in the current wave.
     private List<Enemy> activeEnemies = new List<Enemy>();
-
+    
+    public int Lives
+    {
+        get { return lives; }
+        set
+        {
+            this.lives = value;
+            
+            if (this.lives <= 0)
+            {
+                this.lives = 0;
+                //call game over function when lives are 0;
+                GameOver();
+            }
+            //quick hack by making it a property we can avoid writing whole functions.
+            this.livesText.text = this.lives.ToString();
+        }
+    }
+    
     public bool WaveActive
     {
         get
@@ -51,6 +73,18 @@ public class GameManager : Singleton<GameManager>
             return activeEnemies.Count > 0;
         }
     }
+    
+    public int Currency {
+        get { return currency; }
+        set
+        {
+            this.currency = value;
+            //quick hack by making it a property we can avoid writing whole functions.
+            this.currencyText.text = " " + this.currency.ToString() + "<color=#85BB65>$</color>";
+            Debug.Log("Set starting currency");
+        }
+    }
+    
     public void PickTower(TowerButton towerButton)
     {
         if (Currency >= towerButton.Price)
@@ -91,6 +125,8 @@ public class GameManager : Singleton<GameManager>
     void Start()
     {
         Currency = 100;
+        Lives = 10;
+        
     }
 
     // Update is called once per frame
@@ -106,7 +142,7 @@ public class GameManager : Singleton<GameManager>
         //update the screen wave text.
         this.waveText.text = "Wave: " + wave.ToString();
         StartCoroutine(SpawnWave());
-        waveButton.SetActive(false);
+        // waveButton.SetActive(false);
     }
     
     private IEnumerator SpawnWave()
@@ -155,9 +191,36 @@ public class GameManager : Singleton<GameManager>
     public void RemoveEnemy(Enemy enemy)
     {
         activeEnemies.Remove(enemy);
-        if (!WaveActive)
+        //enable the wave button if conditions are met.
+        if (!WaveActive && !gameOver)
         {
             waveButton.SetActive(true);
         }
+    }
+//call to end the game.
+    public void GameOver()
+    {
+        if (!gameOver)
+        {
+            gameOver = true;
+            //display the game over menu;
+            gameOverMenu.SetActive(true);
+            //display the reached wave.
+            waveTextScore.text = "Wave Reached: " + wave.ToString();
+        }
+    }
+
+    public void Restart()
+    {
+        //to ensure everything works when we restart.
+        Time.timeScale = 1;
+        //load the same leve
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void QuitGame()
+    {
+        //only works when we build the game
+        Application.Quit();
     }
 }

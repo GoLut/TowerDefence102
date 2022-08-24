@@ -144,13 +144,22 @@ public class Enemy : MonoBehaviour
     //use a coroutine so we can pause this function and wait for the animation to complete
     private IEnumerator AttackAndDeathAnimation()
     {
+        //perform an attack animation
         AnimateAttack();
-        float animationLength = myAnimator.GetCurrentAnimatorStateInfo(0).length*3;
+        //play the animation and wait for x attack swings
+        float animationLength = myAnimator.GetCurrentAnimatorStateInfo(0).length*2;
         yield return new WaitForSecondsRealtime(animationLength);
+        
         //Animation finished
+        
+        //substract a live from the player afther the attack animation is done.
+        GameManager.Instance.Lives--;
+        
         //signal the animator to switch to the death animation
         AnimateDeath();
         yield return new WaitForSecondsRealtime(4f);
+        
+        //release the object back to the object pool.
         Release();
     }
     
@@ -173,9 +182,7 @@ public class Enemy : MonoBehaviour
     {
         if (other.tag == "Finish")
         {
-            // Debug.Log("WE have collided witht he castle. ");
             StartCoroutine(AttackAndDeathAnimation());
-            
         }
     }
 
