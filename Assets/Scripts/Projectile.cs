@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,6 +33,11 @@ public class Projectile : MonoBehaviour
         {
             Debug.Log("moving to target.");
             transform.position = Vector3.MoveTowards(transform.position, target.transform.position, Time.deltaTime * parent.ProjectileSpeed);
+
+            //rotate the projectile in the correct direction. 
+            Vector2 dir = target.transform.position - transform.position;
+            float angle = MathF.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
         else if (!target)
         {
