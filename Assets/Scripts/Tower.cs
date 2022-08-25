@@ -10,6 +10,12 @@ public class Tower : MonoBehaviour
     //the current target enemy of the tower.
     private Enemy target;
 
+    public Enemy Target
+    {
+        get => target;
+        set => target = value;
+    }
+
     //this is the projectile type.
     [SerializeField] private string projectileType;
     
@@ -23,6 +29,15 @@ public class Tower : MonoBehaviour
     //how often can we attack
     private float attackCooldown;
 
+    //projectile speed
+    [SerializeField] private float projectileSpeed;
+
+    public float ProjectileSpeed
+    {
+        get { return projectileSpeed; }
+        
+    }
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -78,10 +93,14 @@ public class Tower : MonoBehaviour
 
     private void Shoot()
     {
-        Projectile projectile = (Projectile) GameManager.Instance.Pool.GetObject(projectileType).GetComponent<Projectile>();
-        
+        Projectile projectile =
+            (Projectile)GameManager.Instance.Pool.GetObject(projectileType).GetComponent<Projectile>();
+
         //place at towers position
         projectile.transform.position = transform.position;
+        
+        //initalize all projectile properties eg.: target and speed.
+        projectile.Initialize(this);
     }
     
     //when ever an enemy enters the range circle of the tower.
