@@ -32,6 +32,8 @@ public class GameManager : Singleton<GameManager>
     
     //player health
     private int lives;
+
+    private int enemyHealth;
     
     //currency
     private int currency;
@@ -160,19 +162,25 @@ public class GameManager : Singleton<GameManager>
 
             String type = string.Empty;
 
+            //set the monster to spawn in addition to some monster specific parameters.
             switch (monsterIndex)
             {
                 case 0:
                     type = "Ninja";
+                    enemyHealth = 10;
                     break;
                 case 1:
                     type = "SwordMaster";
+                    enemyHealth = 10;
                     break;
+                
                 case 2:
                     type = "SkeletonKnight";
+                    enemyHealth = 10;
                     break;
                 case 3:
                     type = "WarriorGirl";
+                    enemyHealth = 10;
                     break;
                 default:
                     break;
@@ -180,7 +188,12 @@ public class GameManager : Singleton<GameManager>
 
             //get a reference to the latest spawned Enemy form the object pool.
             Enemy enemy = Pool.GetObject(type).GetComponent<Enemy>();
-            enemy.Spawn();
+
+            //add a litle extra umpfh to the waves.
+            int extraHealth = wave * 1;
+            
+            //spawn the enemies of this wave.
+            enemy.Spawn(enemyHealth + extraHealth);
 
             //a list with all active monsters.
             activeEnemies.Add(enemy);

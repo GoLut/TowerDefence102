@@ -116,3 +116,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectileType: 
   projectileSpeed: 4
+  damage: 5

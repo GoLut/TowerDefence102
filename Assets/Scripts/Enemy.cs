@@ -18,18 +18,29 @@ public class Enemy : MonoBehaviour
 
     private Animator myAnimator;
 
+    [SerializeField] private Stat healthStat;
+
     //blood particle effect
-    [SerializeField] private GameObject blood; 
+    [SerializeField] private GameObject blood;
+
+    private void Awake()
+    {
+        healthStat.Initialize();
+    }
 
     private void Update()
     {
         Move();
     }
 
-    public void Spawn()
+    public void Spawn(int health)
     {
         //set the start position equal to the position of the spawning portal.
         transform.position = LevelManager.Instance.StartPortal.transform.position;
+        
+        //initialize the health of the enemy
+        this.healthStat.MaxVal = health;
+        this.healthStat.CurrentVal = this.healthStat.MaxVal;
         
         //initialize the animator by calling to the animator component attached to the enemy
         myAnimator = GetComponent<Animator>();
@@ -102,8 +113,7 @@ public class Enemy : MonoBehaviour
             GridPosition = path.Peek().GridPosition;
             
             destination = path.Pop().WorldPosition;
-            
-            
+
         }
         else{
             Debug.Log("no path found it is null");
@@ -207,6 +217,14 @@ public class Enemy : MonoBehaviour
         GameManager.Instance.Pool.ReleaseObject(gameObject);
         //removes it self from the active monster list in the game manager
         GameManager.Instance.RemoveEnemy(this);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (IsActive)
+        {
+            healthStat.CurrentVal -= damage;
+        }
     }
     
 }

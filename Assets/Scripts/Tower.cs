@@ -9,13 +9,7 @@ public class Tower : MonoBehaviour
 
     //the current target enemy of the tower.
     private Enemy target;
-
-    public Enemy Target
-    {
-        get => target;
-        set => target = value;
-    }
-
+    
     //this is the projectile type.
     [SerializeField] private string projectileType;
     
@@ -32,11 +26,26 @@ public class Tower : MonoBehaviour
     //projectile speed
     [SerializeField] private float projectileSpeed;
 
+    //tower damage
+    [SerializeField] private int damage;
+
+    public int Damage
+    {
+        get => damage;
+    }
+
     public float ProjectileSpeed
     {
         get { return projectileSpeed; }
         
     }
+    
+    public Enemy Target
+    {
+        get => target;
+        set => target = value;
+    }
+
     
     // Start is called before the first frame update
     void Start()

@@ -44,4 +44,19 @@ public class Projectile : MonoBehaviour
             GameManager.Instance.Pool.ReleaseObject(gameObject);
         }
     }
+
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Enemy")
+        {
+            if (target.gameObject == other.gameObject)
+            {
+                target.TakeDamage(parent.Damage);
+            }
+
+            //release projectile when it has hit the monster.
+            GameManager.Instance.Pool.ReleaseObject(gameObject);
+        }
+    }
 }
