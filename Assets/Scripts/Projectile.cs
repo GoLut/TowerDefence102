@@ -8,11 +8,13 @@ public class Projectile : MonoBehaviour
     private Enemy target;
 
     private Tower parent;
-    
+
+    private Animator myAnimator;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        myAnimator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -53,10 +55,11 @@ public class Projectile : MonoBehaviour
             if (target.gameObject == other.gameObject)
             {
                 target.TakeDamage(parent.Damage);
+                
+                //activate the trigger animation.
+                myAnimator.SetTrigger("Impact");
             }
-
-            //release projectile when it has hit the monster.
-            GameManager.Instance.Pool.ReleaseObject(gameObject);
+            //we release the object when the on state exit script is called 
         }
     }
 }
