@@ -41,13 +41,30 @@ public class Projectile : MonoBehaviour
             float angle = MathF.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
-        else if (!target)
+        else if (!target || !target.IsActive)
         {
-            GameManager.Instance.Pool.ReleaseObject(gameObject);
+            Release();
         }
+        
     }
 
-
+    private void resetAnimations()
+    {
+        myAnimator.SetBool("Death", false);
+        myAnimator.SetInteger("Attack", 0);
+        myAnimator.SetInteger("Horizontal", 0);
+        myAnimator.SetInteger("Vertical", -1);
+        // myAnimator = gameObject.GetComponent<Animator>();
+        myAnimator.Rebind();
+        myAnimator.Update(0f);
+        myAnimator.Play("idle", -1, 0f);
+    }
+    private void Release()
+    {
+        resetAnimations();
+        GameManager.Instance.Pool.ReleaseObject(gameObject);
+    }
+    
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Enemy")

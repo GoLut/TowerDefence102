@@ -20,12 +20,20 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private Stat healthStat;
 
+    private GameObject HealthBarCanvas;
+
     //blood particle effect
     [SerializeField] private GameObject blood;
 
     private void Awake()
     {
         healthStat.Initialize();
+    }
+
+    private void Start()
+    { 
+        //get the health bar canvas, currently the last entry in the list.
+        HealthBarCanvas = transform.GetChild(transform.childCount - 1).gameObject;
     }
 
     private void Update()
@@ -41,6 +49,7 @@ public class Enemy : MonoBehaviour
         //initialize the health of the enemy
         this.healthStat.MaxVal = health;
         this.healthStat.CurrentVal = this.healthStat.MaxVal;
+        this.healthStat.Bar.Reset();
         
         //initialize the animator by calling to the animator component attached to the enemy
         myAnimator = GetComponent<Animator>();
@@ -180,6 +189,9 @@ public class Enemy : MonoBehaviour
         myAnimator.SetBool("Death", true);
         //spawn blood for gore effect :)
         Instantiate(blood, transform.position, Quaternion.identity);
+        //disable health bar
+        HealthBarCanvas.SetActive(false);
+        
     }
 
     private void AnimateAttack()
@@ -209,7 +221,7 @@ public class Enemy : MonoBehaviour
     }
     
     //releases enemy from the world and reset the status of the monster.
-    private void Release()
+    public void Release()
     {
         resetAnimations();
         IsActive = false;
@@ -217,14 +229,38 @@ public class Enemy : MonoBehaviour
         GameManager.Instance.Pool.ReleaseObject(gameObject);
         //removes it self from the active monster list in the game manager
         GameManager.Instance.RemoveEnemy(this);
+        HealthBarCanvas.SetActive(true);
     }
 
+    private IEnumerator DeathAnimation()
+    {
+        //signal the animator to switch to the death animation
+        AnimateDeath();
+        yield return new WaitForSecondsRealtime(4f);
+        
+        //release the object back to the object pool.
+        Release();
+    }
+    
+    
     public void TakeDamage(int damage)
     {
         if (IsActive)
         {
             healthStat.CurrentVal -= damage;
+            if (healthStat.CurrentVal <= 0)
+            {
+                GameManager.Instance.Currency += 2;
+
+                IsActive = false;
+                
+                StartCoroutine(DeathAnimation());
+
+                //allows monsters to walk over death enemies
+                GetComponent<SpriteRenderer>().sortingOrder--;
+                
+                //release is called after coroutine is done
+            }
         }
     }
-    
 }

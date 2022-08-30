@@ -19,6 +19,10 @@ public class ImpactBehaviour : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        //nasty work around but fine for now.
+        animator.Rebind();
+        animator.Update(0f);
+        animator.Play("idle", -1, 0f);
         //release projectile when it has hit the monster.
         GameManager.Instance.Pool.ReleaseObject(animator.gameObject);
     }

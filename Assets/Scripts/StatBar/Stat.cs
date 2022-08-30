@@ -8,6 +8,11 @@ public class Stat
 {
     [SerializeField] private BarScript bar;
 
+    public BarScript Bar
+    {
+        get => bar;
+    }
+
     private float maxVal;
     
     private float currentVal;
